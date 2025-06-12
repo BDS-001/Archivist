@@ -6,11 +6,8 @@ function handleWebRequest(res) {
 
     console.log(`${res.statusCode} - ${res.url}`);
     if (res.statusCode === 404) {
-        const data = res
-        browser.tabs.sendMessage(res.tabId, {
-            action: 'showBanner',
-            data: data
-        })
+        const data = {action: 'showBanner',data: res}
+        browser.tabs.sendMessage(res.tabId, data)
     }
 }
 
