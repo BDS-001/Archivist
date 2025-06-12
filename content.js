@@ -1,6 +1,6 @@
 function createBanner(data) {
     const banner = document.createElement('div');
-    banner.innerHTML = `ARCHIVIST: Detected Missing Page! ${data.statusCode}, check out past versions!`;
+    banner.innerHTML = `ARCHIVIST: Detected Missing Page! ${data.statusCode}, check out past versions! `;
     banner.style.cssText = `
     position: fixed;
     top: 0;
@@ -13,7 +13,7 @@ function createBanner(data) {
     `;
     const waybackURL = document.createElement('a')
     waybackURL.href = `https://web.archive.org/web/*/${data.url}`
-    waybackURL.innerHTML = ' Explore the Archives'
+    waybackURL.innerHTML = 'Explore the Archives'
     banner.appendChild(waybackURL)
     document.body.appendChild(banner);
 }
