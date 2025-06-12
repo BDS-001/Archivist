@@ -13,7 +13,7 @@ function createBanner(data) {
     `;
     const waybackURL = document.createElement('a')
     waybackURL.href = `https://web.archive.org/web/*/${data.url}`
-    waybackURL.innerHTML = 'Explore the Archives'
+    waybackURL.innerHTML = ' Explore the Archives'
     banner.appendChild(waybackURL)
     document.body.appendChild(banner);
 }
