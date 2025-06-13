@@ -1,3 +1,5 @@
+const IMAGE_SIZE = '120px';
+
 function createBanner() {
     // Remove existing banner if it exists
     const existingBanner = document.getElementById('archivistBanner');
@@ -7,21 +9,25 @@ function createBanner() {
     
     const banner = document.createElement('div');
     banner.id = 'archivistBanner';
-    banner.innerHTML = 'ARCHIVIST: Detected Missing Page! Searching archives...';
+    banner.innerHTML = `
+        <div style="text-align: center;">
+            <img src="${browser.runtime.getURL('images/Pasted image.png')}" style="width: ${IMAGE_SIZE}; height: ${IMAGE_SIZE}; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges; margin-bottom: 10px;" alt="Tome">
+            <div>ARCHIVIST: Detected Missing Page! Searching archives...</div>
+        </div>
+    `;
     banner.style.cssText = `
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background: #ff4444;
-        color: white;
+        top: 20px;
+        right: 20px;
+        width: 300px;
+        background: #CBB67B;
+        color: #3B2F1C;
         padding: 15px;
-        text-align: center;
+        border: 8px solid #471a0f;
         font-family: Arial, sans-serif;
-        font-size: 16px;
-        font-weight: bold;
+        font-size: 24px;
         z-index: 999999;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     `;
     
     // Ensure body exists
@@ -44,16 +50,32 @@ function updateBanner(archive) {
         return;
     }
     
+    const tomeImg = `<img src="${browser.runtime.getURL('images/Pasted image.png')}" style="width: ${IMAGE_SIZE}; height: ${IMAGE_SIZE}; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges; margin-bottom: 10px;" alt="Tome">`;
+    
     if (archive.error) {
-        banner.innerHTML = 'ARCHIVIST: Error checking archives';
-        banner.style.background = '#666';
+        banner.innerHTML = `
+            <div style="text-align: center;">
+                ${tomeImg}
+                <div>ARCHIVIST: Error checking archives</div>
+            </div>
+        `;
     } else if (archive?.archived_snapshots.closest?.available) {
         const archiveUrl = archive.archived_snapshots.closest.url;
-        banner.innerHTML = `ARCHIVIST: Archive found! <a href="${archiveUrl}" style="color: #fff; text-decoration: underline;">View latest archived version</a> <a href="https://web.archive.org/web/*/${archive.url}" style="color: #fff; text-decoration: underline;">View archive calendar</a>`;
-        banner.style.background = '#44aa44';
+        banner.innerHTML = `
+            <div style="text-align: center;">
+                ${tomeImg}
+                <div style="margin-bottom: 10px;">ARCHIVIST: Archive found!</div>
+                <a href="${archiveUrl}" style="display: inline-block; padding: 8px 12px; margin: 2px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 3px; color: #333; text-decoration: none; font-size: 12px;">View Latest Archive</a>
+                <a href="https://web.archive.org/web/*/${archive.url}" style="display: inline-block; padding: 8px 12px; margin: 2px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 3px; color: #333; text-decoration: none; font-size: 12px;">View All Archives</a>
+            </div>
+        `;
     } else {
-        banner.innerHTML = 'ARCHIVIST: No archives found for this page';
-        banner.style.background = '#aa4444';
+        banner.innerHTML = `
+            <div style="text-align: center;">
+                ${tomeImg}
+                <div>ARCHIVIST: No archives found for this page</div>
+            </div>
+        `;
     }
     
     console.log('Banner updated', archive);
