@@ -2,11 +2,11 @@
   "manifest_version": 2,
   "name": "Archivist",
   "version": "1.0",
-  "description": "A simple extension that searches the internet archives for past version when pages go missing",
+  "description": "A simple extension that searches the internet archives for past versions when pages go missing",
   
   "permissions": [
     "webRequest",
-    "activeTab",
+    "tabs",
     "<all_urls>"
   ],
 
@@ -14,13 +14,14 @@
     {
       "matches": ["<all_urls>"],
       "js": ["content.js"],
-      "run_at": "document_end"
+      "run_at": "document_start",
+      "all_frames": false
     }
   ],
 
   "background": {
     "scripts": ["background.js"],
-    "persistent": false
+    "persistent": true
   },
   
   "browser_action": {
