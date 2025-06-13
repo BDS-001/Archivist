@@ -47,9 +47,9 @@ function updateBanner(archive) {
     if (archive.error) {
         banner.innerHTML = 'ARCHIVIST: Error checking archives';
         banner.style.background = '#666';
-    } else if (archive.archived_snapshots && archive.archived_snapshots.closest && archive.archived_snapshots.closest.available) {
+    } else if (archive?.archived_snapshots.closest?.available) {
         const archiveUrl = archive.archived_snapshots.closest.url;
-        banner.innerHTML = `ARCHIVIST: Archive found! <a href="${archiveUrl}" style="color: #fff; text-decoration: underline;">View archived version</a>`;
+        banner.innerHTML = `ARCHIVIST: Archive found! <a href="${archiveUrl}" style="color: #fff; text-decoration: underline;">View latest archived version</a> <a href="https://web.archive.org/web/*/${archive.url}" style="color: #fff; text-decoration: underline;">View archive calendar</a>`;
         banner.style.background = '#44aa44';
     } else {
         banner.innerHTML = 'ARCHIVIST: No archives found for this page';
