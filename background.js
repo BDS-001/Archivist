@@ -1,13 +1,30 @@
-function handleWebRequest(res) {
+async function checkArchives(url) {
+    try {
+        const result = await fetch(`https://archive.org/wayback/available?url=${encodeURIComponent(url)}`);
+        if (result.ok) return result.json();
+
+        const error = {
+            name: "HTTPError",
+            message: `Failed to fetch from endpoint. Status: ${result.status}`
+        }
+        return {error};
+    } catch (error) {
+        return {error};
+    }
+}
+
+async function handleWebRequest(res) {
     if (res.error) {
-        console.log(`NETWORK ERROR: ${res.error} on ${res.url}`);
         return
     }
 
-    console.log(`${res.statusCode} - ${res.url}`);
     if (res.statusCode === 404) {
-        const data = {action: 'showBanner',data: res}
-        browser.tabs.sendMessage(res.tabId, data)
+        let message = {action: 'showBanner'}
+        browser.tabs.sendMessage(res.tabId, message).catch(() => {})
+
+        const archiveResults = await checkArchives(res.url)
+        message = {action: 'archiveResults', archive: archiveResults}
+        browser.tabs.sendMessage(res.tabId, message).catch(() => {})
     }
 }
 

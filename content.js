@@ -1,6 +1,7 @@
-function createBanner(data) {
+function createBanner() {
     const banner = document.createElement('div');
-    banner.innerHTML = `ARCHIVIST: Detected Missing Page! ${data.statusCode}, check out past versions! `;
+    banner.id = 'archivistBanner'
+    banner.innerHTML = `ARCHIVIST: Detected Missing Page! searching the archives`;
     banner.style.cssText = `
     position: fixed;
     top: 0;
@@ -11,15 +12,22 @@ function createBanner(data) {
     padding: 10px;
     z-index: 10000;
     `;
-    const waybackURL = document.createElement('a')
-    waybackURL.href = `https://web.archive.org/web/*/${data.url}`
-    waybackURL.innerHTML = 'Explore the Archives'
-    banner.appendChild(waybackURL)
     document.body.appendChild(banner);
+    return banner
+}
+
+function updateBanner(archive) {
+    const banner = document.getElementById('archivistBanner')
+    archive.available ? banner.innerHTML = `Archive Discovered! ${archive.url}` : banner.innerHTML = `No Archives Found!`
+
 }
 
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === 'showBanner') {
-        createBanner(message.data)
+        createBanner(message.archive)
+    }
+
+    if (message.action === 'archiveResults') {
+        updateBanner(message.archive)
     }
 })
