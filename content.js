@@ -61,12 +61,14 @@ function updateBanner(archive) {
     }
     
     const tomeImg = `<img src="${browser.runtime.getURL('images/Pasted image.png')}" style="width: ${IMAGE_SIZE}; height: ${IMAGE_SIZE}; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;" alt="Tome">`;
+    const calendarLink = `<a href="https://web.archive.org/web/*/${archive.url}" style="display: inline-block; padding: 8px 12px; margin: 4px; background: #E6D7B8; border: 2px solid #8B4513; color: #2D1B08; text-decoration: none; font-size: 14px; box-shadow: 2px 2px 0px #654321; font-family: 'Pixelify Sans', Arial, sans-serif; image-rendering: pixelated;">View Archive Calendar</a>`;
     
     if (archive.error) {
         banner.innerHTML = `
             <div style="text-align: center;">
                 ${tomeImg}
-                <div>ARCHIVIST: Error checking archives</div>
+                <div style="margin-bottom: 10px;">ARCHIVIST: Error checking archives</div>
+                ${calendarLink}
             </div>
         `;
     } else if (archive?.archived_snapshots.closest?.available) {
@@ -76,14 +78,15 @@ function updateBanner(archive) {
                 ${tomeImg}
                 <div style="margin-bottom: 10px;">ARCHIVIST: Archive found!</div>
                 <a href="${archiveUrl}" style="display: inline-block; padding: 8px 12px; margin: 4px; background: #E6D7B8; border: 2px solid #8B4513; color: #2D1B08; text-decoration: none; font-size: 14px; box-shadow: 2px 2px 0px #654321; font-family: 'Pixelify Sans', Arial, sans-serif; image-rendering: pixelated;">View Latest Archive</a>
-                <a href="https://web.archive.org/web/*/${archive.url}" style="display: inline-block; padding: 8px 12px; margin: 4px; background: #E6D7B8; border: 2px solid #8B4513; color: #2D1B08; text-decoration: none; font-size: 14px; box-shadow: 2px 2px 0px #654321; font-family: 'Pixelify Sans', Arial, sans-serif; image-rendering: pixelated;">View All Archives</a>
+                ${calendarLink}
             </div>
         `;
     } else {
         banner.innerHTML = `
             <div style="text-align: center;">
                 ${tomeImg}
-                <div>ARCHIVIST: No archives found for this page</div>
+                <div style="margin-bottom: 10px;">ARCHIVIST: No archives found</div>
+                ${calendarLink}
             </div>
         `;
     }
