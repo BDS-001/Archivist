@@ -6,6 +6,37 @@ fontFace.load().then(() => {
     document.fonts.add(fontFace);
 });
 
+function addCloseButtonListener() {
+    const closeBtn = document.getElementById('archivistCloseBtn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            const notification = document.getElementById('archivistNotification');
+            if (notification) {
+                notification.remove();
+            }
+        });
+    }
+}
+
+function buildNotificationHTML(text, showCalendarButton = false, archiveUrl = null) {
+    const tomeImg = `<img src="${browser.runtime.getURL('images/Pasted image.png')}" style="width: ${IMAGE_SIZE}; height: ${IMAGE_SIZE}; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;" alt="Tome">`;
+    const calendarLink = showCalendarButton ? `<a href="https://web.archive.org/web/*/${window.location.href}" style="display: inline-block; padding: 8px 12px; margin: 4px; background: #E6D7B8; border: 2px solid #8B4513; color: #2D1B08; text-decoration: none; font-size: 14px; box-shadow: 2px 2px 0px #654321; font-family: 'Pixelify Sans', Arial, sans-serif; image-rendering: pixelated;">View Archive Calendar</a>` : '';
+    const archiveButton = archiveUrl ? `<a href="${archiveUrl}" style="display: inline-block; padding: 8px 12px; margin: 4px; background: #E6D7B8; border: 2px solid #8B4513; color: #2D1B08; text-decoration: none; font-size: 14px; box-shadow: 2px 2px 0px #654321; font-family: 'Pixelify Sans', Arial, sans-serif; image-rendering: pixelated;">View Latest Archive</a>` : '';
+    
+    return `
+        <div style="position: relative;">
+            <div style="position: absolute; top: -5px; left: -5px; font-size: 12px; font-weight: bold; color: #8B4513;">ARCHIVIST</div>
+            <button id="archivistCloseBtn" style="position: absolute; top: -10px; right: -10px; background: none; color: #2D1B08; border: none; font-size: 30px; width: 40px; height 40px; cursor: pointer; font-weight: bold; line-height: 1; font-family: 'Pixelify Sans', Arial, sans-serif; display: flex; align-items: center; justify-content: center;">x</button>
+            <div style="text-align: center;">
+                ${tomeImg}
+                <div style="margin-bottom: 10px;">${text}</div>
+                ${archiveButton}
+                ${calendarLink}
+            </div>
+        </div>
+    `;
+}
+
 function createNotification() {
     // Remove existing notification if it exists
     const existingNotification = document.getElementById('archivistNotification');
@@ -15,15 +46,7 @@ function createNotification() {
     
     const notification = document.createElement('div');
     notification.id = 'archivistNotification';
-    notification.innerHTML = `
-        <div style="position: relative;">
-            <div style="position: absolute; top: -5px; left: -5px; font-size: 12px; font-weight: bold; color: #8B4513;">ARCHIVIST</div>
-            <div style="text-align: center;">
-                <img src="${browser.runtime.getURL('images/Pasted image.png')}" style="width: ${IMAGE_SIZE}; height: ${IMAGE_SIZE}; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;" alt="Tome">
-                <div>Detected Missing Page! Searching archives...</div>
-            </div>
-        </div>
-    `;
+    notification.innerHTML = buildNotificationHTML('Detected Missing Page! Searching archives...');
     notification.style.cssText = `
         position: fixed;
         top: 20px;
@@ -46,9 +69,11 @@ function createNotification() {
     if (!document.body) {
         document.addEventListener('DOMContentLoaded', () => {
             document.body.appendChild(notification);
+            addCloseButtonListener();
         });
     } else {
         document.body.appendChild(notification);
+        addCloseButtonListener();
     }
     
     console.log('Notification created');
@@ -62,52 +87,19 @@ function updateNotification(archive) {
         return;
     }
     
-    const tomeImg = `<img src="${browser.runtime.getURL('images/Pasted image.png')}" style="width: ${IMAGE_SIZE}; height: ${IMAGE_SIZE}; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;" alt="Tome">`;
-    const calendarLink = `<a href="https://web.archive.org/web/*/${archive.url}" style="display: inline-block; padding: 8px 12px; margin: 4px; background: #E6D7B8; border: 2px solid #8B4513; color: #2D1B08; text-decoration: none; font-size: 14px; box-shadow: 2px 2px 0px #654321; font-family: 'Pixelify Sans', Arial, sans-serif; image-rendering: pixelated;">View Archive Calendar</a>`;
-    
     if (archive.error) {
-        notification.innerHTML = `
-            <div style="position: relative;">
-                <div style="position: absolute; top: -5px; left: -5px; font-size: 12px; font-weight: bold; color: #8B4513;">ARCHIVIST</div>
-                <div style="text-align: center;">
-                    ${tomeImg}
-                    <div style="margin-bottom: 10px;">Error checking archives</div>
-                    ${calendarLink}
-                </div>
-            </div>
-        `;
+        notification.innerHTML = buildNotificationHTML('Error checking archives', true);
     } else if (archive?.archived_snapshots.closest?.available) {
         const archiveUrl = archive.archived_snapshots.closest.url;
-        notification.innerHTML = `
-            <div style="position: relative;">
-                <div style="position: absolute; top: -5px; left: -5px; font-size: 12px; font-weight: bold; color: #8B4513;">ARCHIVIST</div>
-                <div style="text-align: center;">
-                    ${tomeImg}
-                    <div style="margin-bottom: 10px;">Archive found!</div>
-                    <a href="${archiveUrl}" style="display: inline-block; padding: 8px 12px; margin: 4px; background: #E6D7B8; border: 2px solid #8B4513; color: #2D1B08; text-decoration: none; font-size: 14px; box-shadow: 2px 2px 0px #654321; font-family: 'Pixelify Sans', Arial, sans-serif; image-rendering: pixelated;">View Latest Archive</a>
-                    ${calendarLink}
-                </div>
-            </div>
-        `;
+        notification.innerHTML = buildNotificationHTML('Archive found!', true, archiveUrl);
     } else {
-        notification.innerHTML = `
-            <div style="position: relative;">
-                <div style="position: absolute; top: -5px; left: -5px; font-size: 12px; font-weight: bold; color: #8B4513;">ARCHIVIST</div>
-                <div style="text-align: center;">
-                    ${tomeImg}
-                    <div style="margin-bottom: 10px;">No archives found</div>
-                    ${calendarLink}
-                </div>
-            </div>
-        `;
+        notification.innerHTML = buildNotificationHTML('No archives found', true);
     }
     
-    console.log('Notification updated', archive);
+    addCloseButtonListener();
 }
 
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log('Message received:', message);
-    
     if (message.action === 'showNotification') {
         createNotification();
         sendResponse({success: true});
