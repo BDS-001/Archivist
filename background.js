@@ -29,7 +29,7 @@ async function handleWebRequest(res) {
     
     // Wait a bit for content script to be ready
     setTimeout(async () => {
-        await sendMessageWithRetry(res.tabId, {action: 'showBanner'});
+        await sendMessageWithRetry(res.tabId, {action: 'showNotification'});
         
         // Check archives and update banner
         const archiveResults = await checkArchives(res.url);

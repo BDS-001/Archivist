@@ -97,7 +97,7 @@ function updateNotification(archive) {
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log('Message received:', message);
     
-    if (message.action === 'showBanner') {
+    if (message.action === 'showNotification') {
         createNotification();
         sendResponse({success: true});
     }
