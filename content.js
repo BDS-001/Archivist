@@ -26,14 +26,18 @@ function createBanner() {
         top: 20px;
         right: 20px;
         width: 300px;
-        background: #CBB67B;
-        color: #3B2F1C;
+        background: #F4E4BC;
+        color: #2D1B08;
         padding: 15px;
-        border: 8px solid #471a0f;
+        border: 4px solid #8B4513;
+        border-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><rect x="0" y="0" width="4" height="4" fill="%23654321"/><rect x="4" y="0" width="8" height="4" fill="%238B4513"/><rect x="12" y="0" width="4" height="4" fill="%23654321"/><rect x="0" y="4" width="4" height="8" fill="%238B4513"/><rect x="12" y="4" width="4" height="8" fill="%238B4513"/><rect x="0" y="12" width="4" height="4" fill="%23654321"/><rect x="4" y="12" width="8" height="4" fill="%238B4513"/><rect x="12" y="12" width="4" height="4" fill="%23654321"/></svg>') 4;
         font-family: 'Pixelify Sans', Arial, sans-serif;
         font-size: 24px;
         z-index: 999999;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        box-shadow: 4px 4px 0px #654321;
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: crisp-edges;
     `;
     
     // Ensure body exists
@@ -71,8 +75,8 @@ function updateBanner(archive) {
             <div style="text-align: center;">
                 ${tomeImg}
                 <div style="margin-bottom: 10px;">ARCHIVIST: Archive found!</div>
-                <a href="${archiveUrl}" style="display: inline-block; padding: 8px 12px; margin: 2px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 3px; color: #333; text-decoration: none; font-size: 12px;">View Latest Archive</a>
-                <a href="https://web.archive.org/web/*/${archive.url}" style="display: inline-block; padding: 8px 12px; margin: 2px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 3px; color: #333; text-decoration: none; font-size: 12px;">View All Archives</a>
+                <a href="${archiveUrl}" style="display: inline-block; padding: 8px 12px; margin: 4px; background: #E6D7B8; border: 2px solid #8B4513; color: #2D1B08; text-decoration: none; font-size: 14px; box-shadow: 2px 2px 0px #654321; font-family: 'Pixelify Sans', Arial, sans-serif; image-rendering: pixelated;">View Latest Archive</a>
+                <a href="https://web.archive.org/web/*/${archive.url}" style="display: inline-block; padding: 8px 12px; margin: 4px; background: #E6D7B8; border: 2px solid #8B4513; color: #2D1B08; text-decoration: none; font-size: 14px; box-shadow: 2px 2px 0px #654321; font-family: 'Pixelify Sans', Arial, sans-serif; image-rendering: pixelated;">View All Archives</a>
             </div>
         `;
     } else {
