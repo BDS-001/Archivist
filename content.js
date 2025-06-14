@@ -16,9 +16,12 @@ function createNotification() {
     const notification = document.createElement('div');
     notification.id = 'archivistNotification';
     notification.innerHTML = `
-        <div style="text-align: center;">
-            <img src="${browser.runtime.getURL('images/Pasted image.png')}" style="width: ${IMAGE_SIZE}; height: ${IMAGE_SIZE}; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;" alt="Tome">
-            <div>ARCHIVIST: Detected Missing Page! Searching archives...</div>
+        <div style="position: relative;">
+            <div style="position: absolute; top: -5px; left: -5px; font-size: 12px; font-weight: bold; color: #8B4513;">ARCHIVIST</div>
+            <div style="text-align: center;">
+                <img src="${browser.runtime.getURL('images/Pasted image.png')}" style="width: ${IMAGE_SIZE}; height: ${IMAGE_SIZE}; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;" alt="Tome">
+                <div>Detected Missing Page! Searching archives...</div>
+            </div>
         </div>
     `;
     notification.style.cssText = `
@@ -30,7 +33,6 @@ function createNotification() {
         color: #2D1B08;
         padding: 15px;
         border: 4px solid #8B4513;
-        border-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><rect x="0" y="0" width="4" height="4" fill="%23654321"/><rect x="4" y="0" width="8" height="4" fill="%238B4513"/><rect x="12" y="0" width="4" height="4" fill="%23654321"/><rect x="0" y="4" width="4" height="8" fill="%238B4513"/><rect x="12" y="4" width="4" height="8" fill="%238B4513"/><rect x="0" y="12" width="4" height="4" fill="%23654321"/><rect x="4" y="12" width="8" height="4" fill="%238B4513"/><rect x="12" y="12" width="4" height="4" fill="%23654321"/></svg>') 4;
         font-family: 'Pixelify Sans', Arial, sans-serif;
         font-size: 24px;
         z-index: 999999;
@@ -65,28 +67,37 @@ function updateNotification(archive) {
     
     if (archive.error) {
         notification.innerHTML = `
-            <div style="text-align: center;">
-                ${tomeImg}
-                <div style="margin-bottom: 10px;">ARCHIVIST: Error checking archives</div>
-                ${calendarLink}
+            <div style="position: relative;">
+                <div style="position: absolute; top: -5px; left: -5px; font-size: 12px; font-weight: bold; color: #8B4513;">ARCHIVIST</div>
+                <div style="text-align: center;">
+                    ${tomeImg}
+                    <div style="margin-bottom: 10px;">Error checking archives</div>
+                    ${calendarLink}
+                </div>
             </div>
         `;
     } else if (archive?.archived_snapshots.closest?.available) {
         const archiveUrl = archive.archived_snapshots.closest.url;
         notification.innerHTML = `
-            <div style="text-align: center;">
-                ${tomeImg}
-                <div style="margin-bottom: 10px;">ARCHIVIST: Archive found!</div>
-                <a href="${archiveUrl}" style="display: inline-block; padding: 8px 12px; margin: 4px; background: #E6D7B8; border: 2px solid #8B4513; color: #2D1B08; text-decoration: none; font-size: 14px; box-shadow: 2px 2px 0px #654321; font-family: 'Pixelify Sans', Arial, sans-serif; image-rendering: pixelated;">View Latest Archive</a>
-                ${calendarLink}
+            <div style="position: relative;">
+                <div style="position: absolute; top: -5px; left: -5px; font-size: 12px; font-weight: bold; color: #8B4513;">ARCHIVIST</div>
+                <div style="text-align: center;">
+                    ${tomeImg}
+                    <div style="margin-bottom: 10px;">Archive found!</div>
+                    <a href="${archiveUrl}" style="display: inline-block; padding: 8px 12px; margin: 4px; background: #E6D7B8; border: 2px solid #8B4513; color: #2D1B08; text-decoration: none; font-size: 14px; box-shadow: 2px 2px 0px #654321; font-family: 'Pixelify Sans', Arial, sans-serif; image-rendering: pixelated;">View Latest Archive</a>
+                    ${calendarLink}
+                </div>
             </div>
         `;
     } else {
         notification.innerHTML = `
-            <div style="text-align: center;">
-                ${tomeImg}
-                <div style="margin-bottom: 10px;">ARCHIVIST: No archives found</div>
-                ${calendarLink}
+            <div style="position: relative;">
+                <div style="position: absolute; top: -5px; left: -5px; font-size: 12px; font-weight: bold; color: #8B4513;">ARCHIVIST</div>
+                <div style="text-align: center;">
+                    ${tomeImg}
+                    <div style="margin-bottom: 10px;">No archives found</div>
+                    ${calendarLink}
+                </div>
             </div>
         `;
     }
