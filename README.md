@@ -6,8 +6,10 @@ A Firefox extension that automatically detects missing web pages (404 errors) an
 
 - **Automatic Detection**: Monitors web requests and detects 404 errors
 - **Archive Search**: Automatically queries the Internet Archive API for available snapshots
-- **Visual Banner**: Displays a prominent banner on 404 pages with archive status
-- **Direct Access**: Provides clickable links to archived versions when available
+- **Themed Notification**: Displays a styled notification popup with custom pixel art design
+- **Direct Archive Access**: Provides buttons to view the latest archive and archive calendar
+- **Closeable Interface**: Users can dismiss the notification with a close button
+- **Custom Branding**: Features custom "Archivist" branding and tome imagery
 - **Retry Logic**: Includes robust retry mechanisms for reliable communication
 
 ## How It Works
@@ -15,11 +17,11 @@ A Firefox extension that automatically detects missing web pages (404 errors) an
 1. **Background Monitoring**: The extension monitors all web requests in the background
 2. **404 Detection**: When a 404 error is detected, it triggers the archive search process
 3. **Archive Query**: Queries the Internet Archive's Wayback Machine API for available snapshots
-4. **Banner Display**: Shows a colored banner at the top of the page with results:
-   - **Red**: Searching archives (initial state)
-   - **Green**: Archive found with clickable link
-   - **Dark Red**: No archives available
-   - **Gray**: Error occurred during search
+4. **Notification Display**: Shows a themed notification popup in the top-right corner with:
+   - **Initial**: "Searching archives..." message with tome image
+   - **Success**: "Archive found!" with buttons for latest archive and calendar view
+   - **No Results**: "No archives found" with calendar view button
+   - **Error**: "Error checking archives" with calendar view button
 
 ## Installation
 
@@ -37,8 +39,10 @@ A Firefox extension that automatically detects missing web pages (404 errors) an
 
 - `manifest.json` - Extension configuration and permissions
 - `background.js` - Background script that monitors web requests and handles archive API calls
-- `content.js` - Content script that creates and manages the banner display
-- `popup.html` - Extension popup with basic information and source code link
+- `content.js` - Content script that creates and manages the themed notification popup
+- `popup.html` - Extension popup with custom styling and information
+- `images/` - Contains the custom tome icon used in notifications and popup
+- `font/` - Contains the Pixelify Sans font family for consistent retro styling
 
 ## Permissions
 
@@ -63,8 +67,11 @@ This extension is currently under development. Features and functionality may ch
 - **Manifest Version**: 2
 - **Content Script**: Runs on all URLs at document start
 - **Background Script**: Persistent background process
-- **Retry Logic**: Up to 3 retry attempts with 500ms delays for message passing
-- **Timeout**: 1-second delay before showing banner to ensure content script readiness
+- **Retry Logic**: Up to 5 retry attempts with 500ms delays for message passing
+- **Timeout**: 500ms delay before showing notification to ensure content script readiness
+- **Custom Styling**: Uses Pixelify Sans font with retro pixel art aesthetic
+- **Notification Positioning**: Fixed position notification in top-right corner
+- **Web Accessible Resources**: Images and fonts are accessible to content scripts
 
 ## Contributing
 
