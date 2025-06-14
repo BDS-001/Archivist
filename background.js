@@ -8,7 +8,7 @@ async function checkArchives(url) {
     }
 }
 
-async function sendMessageWithRetry(tabId, message, maxRetries = 3) {
+async function sendMessageWithRetry(tabId, message, maxRetries = 5) {
     for (let i = 0; i < maxRetries; i++) {
         try {
             await browser.tabs.sendMessage(tabId, message);
@@ -37,7 +37,7 @@ async function handleWebRequest(res) {
             action: 'archiveResults', 
             archive: archiveResults
         });
-    }, 1000);
+    }, 500);
 }
 
 browser.webRequest.onCompleted.addListener(handleWebRequest, {urls: ["<all_urls>"], types: ["main_frame"]}, []);
