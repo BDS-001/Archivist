@@ -24,7 +24,6 @@ async function sendMessageWithRetry(tabId, message, maxRetries = 3) {
 }
 
 async function handleWebRequest(res) {
-    console.log(res.statusCode, res.url)
     // Only handle 404 errors
     if (res.statusCode !== 404) return;
     

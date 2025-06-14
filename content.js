@@ -6,22 +6,22 @@ fontFace.load().then(() => {
     document.fonts.add(fontFace);
 });
 
-function createBanner() {
-    // Remove existing banner if it exists
-    const existingBanner = document.getElementById('archivistBanner');
-    if (existingBanner) {
-        existingBanner.remove();
+function createNotification() {
+    // Remove existing notification if it exists
+    const existingNotification = document.getElementById('archivistNotification');
+    if (existingNotification) {
+        existingNotification.remove();
     }
     
-    const banner = document.createElement('div');
-    banner.id = 'archivistBanner';
-    banner.innerHTML = `
+    const notification = document.createElement('div');
+    notification.id = 'archivistNotification';
+    notification.innerHTML = `
         <div style="text-align: center;">
             <img src="${browser.runtime.getURL('images/Pasted image.png')}" style="width: ${IMAGE_SIZE}; height: ${IMAGE_SIZE}; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;" alt="Tome">
             <div>ARCHIVIST: Detected Missing Page! Searching archives...</div>
         </div>
     `;
-    banner.style.cssText = `
+    notification.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
@@ -43,20 +43,20 @@ function createBanner() {
     // Ensure body exists
     if (!document.body) {
         document.addEventListener('DOMContentLoaded', () => {
-            document.body.appendChild(banner);
+            document.body.appendChild(notification);
         });
     } else {
-        document.body.appendChild(banner);
+        document.body.appendChild(notification);
     }
     
-    console.log('Banner created');
-    return banner;
+    console.log('Notification created');
+    return notification;
 }
 
-function updateBanner(archive) {
-    const banner = document.getElementById('archivistBanner');
-    if (!banner) {
-        console.log('Banner not found when trying to update');
+function updateNotification(archive) {
+    const notification = document.getElementById('archivistNotification');
+    if (!notification) {
+        console.log('Notification not found when trying to update');
         return;
     }
     
@@ -64,7 +64,7 @@ function updateBanner(archive) {
     const calendarLink = `<a href="https://web.archive.org/web/*/${archive.url}" style="display: inline-block; padding: 8px 12px; margin: 4px; background: #E6D7B8; border: 2px solid #8B4513; color: #2D1B08; text-decoration: none; font-size: 14px; box-shadow: 2px 2px 0px #654321; font-family: 'Pixelify Sans', Arial, sans-serif; image-rendering: pixelated;">View Archive Calendar</a>`;
     
     if (archive.error) {
-        banner.innerHTML = `
+        notification.innerHTML = `
             <div style="text-align: center;">
                 ${tomeImg}
                 <div style="margin-bottom: 10px;">ARCHIVIST: Error checking archives</div>
@@ -73,7 +73,7 @@ function updateBanner(archive) {
         `;
     } else if (archive?.archived_snapshots.closest?.available) {
         const archiveUrl = archive.archived_snapshots.closest.url;
-        banner.innerHTML = `
+        notification.innerHTML = `
             <div style="text-align: center;">
                 ${tomeImg}
                 <div style="margin-bottom: 10px;">ARCHIVIST: Archive found!</div>
@@ -82,7 +82,7 @@ function updateBanner(archive) {
             </div>
         `;
     } else {
-        banner.innerHTML = `
+        notification.innerHTML = `
             <div style="text-align: center;">
                 ${tomeImg}
                 <div style="margin-bottom: 10px;">ARCHIVIST: No archives found</div>
@@ -91,19 +91,19 @@ function updateBanner(archive) {
         `;
     }
     
-    console.log('Banner updated', archive);
+    console.log('Notification updated', archive);
 }
 
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log('Message received:', message);
     
     if (message.action === 'showBanner') {
-        createBanner();
+        createNotification();
         sendResponse({success: true});
     }
     
     if (message.action === 'archiveResults') {
-        updateBanner(message.archive);
+        updateNotification(message.archive);
         sendResponse({success: true});
     }
     
