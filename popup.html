@@ -69,18 +69,28 @@
             display: inline-block;
             padding: 8px 12px;
             margin: 4px;
-            background: #E6D7B8;
-            border: 2px solid #8B4513;
-            color: #2D1B08;
+            background-image: url('./images/button-base.webp');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: none;
+            color: #F4E4BC;
             text-decoration: none;
             font-size: 14px;
-            box-shadow: 2px 2px 0px #654321;
             font-family: 'Pixelify Sans', Arial, sans-serif;
             image-rendering: pixelated;
+            text-shadow: 1px 1px 0px #2D1B08;
+            font-weight: bold;
+            position: relative;
+            min-width: 100px;
+            min-height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .archive-button:hover {
-            background: #DDD0B1;
+            filter: brightness(1.1);
         }
     </style>
 </head>
