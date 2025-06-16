@@ -15,12 +15,33 @@ async function setupArchiveLink() {
         return
     }
     
+    const buttonText = 'View Archive'
+    const buttonBase = buttonText.length > 12 ? 'button-base-wide-export.webp' : 'button-base.webp'
+    
     const button = document.createElement('a')
     button.href = `https://web.archive.org/web/*/${url}`
-    button.innerHTML = 'View Archive'
+    button.innerHTML = buttonText
     button.className = 'archive-button'
     button.target = '_blank'
     button.rel = 'noopener noreferrer'
+    button.style.backgroundImage = `url('${browser.runtime.getURL(`images/${buttonBase}`)}')`
+    button.style.backgroundSize = '100% 100%'
+    button.style.backgroundRepeat = 'no-repeat'
+    button.style.backgroundPosition = 'center'
+    button.style.display = 'flex'
+    button.style.alignItems = 'center'
+    button.style.justifyContent = 'center'
+    button.style.padding = '8px 12px'
+    button.style.border = 'none'
+    button.style.color = '#F4E4BC'
+    button.style.textDecoration = 'none'
+    button.style.fontSize = '14px'
+    button.style.fontFamily = "'Pixelify Sans', Arial, sans-serif"
+    button.style.imageRendering = 'pixelated'
+    button.style.textShadow = '1px 1px 0px #2D1B08'
+    button.style.fontWeight = 'bold'
+    button.style.minWidth = '100px'
+    button.style.minHeight = '32px'
 
     const archiveSection = document.createElement('div')
     archiveSection.style.display = 'flex'
