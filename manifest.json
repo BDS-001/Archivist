@@ -24,9 +24,24 @@
     "persistent": true
   },
   
+  "icons": {
+    "16": "images/logo/booklogo16.png",
+    "32": "images/logo/booklogo32.png",
+    "48": "images/logo/booklogo48.png",
+    "96": "images/logo/booklogo96.png",
+    "128": "images/logo/booklogo128.png"
+  },
+
   "browser_action": {
     "default_title": "About Archivist",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/logo/booklogo16.png",
+      "32": "images/logo/booklogo32.png",
+      "48": "images/logo/booklogo48.png",
+      "96": "images/logo/booklogo96.png",
+      "128": "images/logo/booklogo128.png"
+    }
   },
 
   "web_accessible_resources": [
