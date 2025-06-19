@@ -1,7 +1,10 @@
 const IMAGE_SIZE = '120px';
 
+// Cross-browser compatibility
+const browserAPI = (typeof browser !== 'undefined') ? browser : chrome;
+
 // Load the custom font
-const fontFace = new FontFace('Pixelify Sans', `url(${browser.runtime.getURL('font/Pixelify_Sans/PixelifySans-VariableFont_wght.ttf')})`);
+const fontFace = new FontFace('Pixelify Sans', `url(${browserAPI.runtime.getURL('font/Pixelify_Sans/PixelifySans-VariableFont_wght.ttf')})`);
 fontFace.load().then(() => {
     document.fonts.add(fontFace);
 });
@@ -23,11 +26,11 @@ function getButtonBase(text) {
 }
 
 function buildNotificationHTML(text, showCalendarButton = false, archiveUrl = null) {
-    const tomeImg = `<img src="${browser.runtime.getURL('images/tome.png')}" style="width: ${IMAGE_SIZE}; height: ${IMAGE_SIZE}; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;" alt="Tome">`;
+    const tomeImg = `<img src="${browserAPI.runtime.getURL('images/tome.png')}" style="width: ${IMAGE_SIZE}; height: ${IMAGE_SIZE}; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;" alt="Tome">`;
     const calendarButtonBase = getButtonBase('View Archive Calendar');
-    const calendarLink = showCalendarButton ? `<a href="https://web.archive.org/web/*/${window.location.href}" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; justify-content: center; padding: 8px 12px; margin: 4px; background-image: url('${browser.runtime.getURL(`images/${calendarButtonBase}`)}'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center; border: none; color: #F4E4BC; text-decoration: none; font-size: 16px; font-family: 'Pixelify Sans', Arial, sans-serif; image-rendering: pixelated; text-shadow: 1px 1px 0px #2D1B08; font-weight: bold; min-width: 100px; min-height: 32px;">View Archive Calendar</a>` : '';
+    const calendarLink = showCalendarButton ? `<a href="https://web.archive.org/web/*/${window.location.href}" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; justify-content: center; padding: 8px 12px; margin: 4px; background-image: url('${browserAPI.runtime.getURL(`images/${calendarButtonBase}`)}'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center; border: none; color: #F4E4BC; text-decoration: none; font-size: 16px; font-family: 'Pixelify Sans', Arial, sans-serif; image-rendering: pixelated; text-shadow: 1px 1px 0px #2D1B08; font-weight: bold; min-width: 100px; min-height: 32px;">View Archive Calendar</a>` : '';
     const archiveButtonBase = getButtonBase('View Latest Archive');
-    const archiveButton = archiveUrl ? `<a href="${archiveUrl}" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; justify-content: center; padding: 8px 12px; margin: 4px; background-image: url('${browser.runtime.getURL(`images/${archiveButtonBase}`)}'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center; border: none; color: #F4E4BC; text-decoration: none; font-size: 16px; font-family: 'Pixelify Sans', Arial, sans-serif; image-rendering: pixelated; text-shadow: 1px 1px 0px #2D1B08; font-weight: bold; min-width: 100px; min-height: 32px;">View Latest Archive</a>` : '';
+    const archiveButton = archiveUrl ? `<a href="${archiveUrl}" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; justify-content: center; padding: 8px 12px; margin: 4px; background-image: url('${browserAPI.runtime.getURL(`images/${archiveButtonBase}`)}'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center; border: none; color: #F4E4BC; text-decoration: none; font-size: 16px; font-family: 'Pixelify Sans', Arial, sans-serif; image-rendering: pixelated; text-shadow: 1px 1px 0px #2D1B08; font-weight: bold; min-width: 100px; min-height: 32px;">View Latest Archive</a>` : '';
     
     return `
         <div style="position: relative;">
@@ -105,7 +108,7 @@ function updateNotification(archive) {
     addCloseButtonListener();
 }
 
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+browserAPI.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === 'showNotification') {
         createNotification();
         sendResponse({success: true});

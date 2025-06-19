@@ -1,12 +1,15 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Archivist",
   "version": "1.0",
   "description": "A simple extension that searches the internet archives for past versions when pages go missing",
-  
+
   "permissions": [
-    "webRequest",
     "tabs",
+    "declarativeNetRequest"
+  ],
+
+  "host_permissions": [
     "<all_urls>"
   ],
 
@@ -20,8 +23,8 @@
   ],
 
   "background": {
-    "scripts": ["background.js"],
-    "persistent": true
+    "service_worker": "background.js",
+    "scripts": ["background.js"]
   },
   
   "icons": {
@@ -32,7 +35,7 @@
     "128": "images/logo/booklogo128.png"
   },
 
-  "browser_action": {
+  "action": {
     "default_title": "About Archivist",
     "default_popup": "popup.html",
     "default_icon": {
@@ -45,9 +48,13 @@
   },
 
   "web_accessible_resources": [
-    "images/*",
-    "font/*"
+    {
+      "resources": ["images/*", "font/*"],
+      "matches": ["<all_urls>"]
+    }
   ],
 
-  "content_security_policy": "script-src 'self'; object-src 'self'"
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }

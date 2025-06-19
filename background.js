@@ -8,10 +8,13 @@ async function checkArchives(url) {
     }
 }
 
+// Cross-browser compatibility
+const browserAPI = (typeof browser !== 'undefined') ? browser : chrome;
+
 async function sendMessageWithRetry(tabId, message, maxRetries = 5) {
     for (let i = 0; i < maxRetries; i++) {
         try {
-            await browser.tabs.sendMessage(tabId, message);
+            await browserAPI.tabs.sendMessage(tabId, message);
             return;
         } catch (error) {
             console.log(`Message send attempt ${i + 1} failed:`, error);
@@ -23,21 +26,26 @@ async function sendMessageWithRetry(tabId, message, maxRetries = 5) {
     console.log('All message send attempts failed');
 }
 
-async function handleWebRequest(res) {
-    // Only handle 404 errors
-    if (res.statusCode !== 404) return;
-    
-    // Wait a bit for content script to be ready
-    setTimeout(async () => {
-        await sendMessageWithRetry(res.tabId, {action: 'showNotification'});
-        
-        // Check archives and update banner
-        const archiveResults = await checkArchives(res.url);
-        await sendMessageWithRetry(res.tabId, {
-            action: 'archiveResults', 
-            archive: archiveResults
-        });
-    }, 500);
+async function handleTabUpdate(tabId, changeInfo, tab) {
+    if (changeInfo.status === 'complete' && tab.url && 
+        (tab.url.startsWith('http://') || tab.url.startsWith('https://'))) {
+        try {
+            const response = await fetch(tab.url, {method: 'HEAD'});
+            if (response.status === 404) {
+                setTimeout(async () => {
+                    await sendMessageWithRetry(tabId, {action: 'showNotification'});
+                    
+                    const archiveResults = await checkArchives(tab.url);
+                    await sendMessageWithRetry(tabId, {
+                        action: 'archiveResults', 
+                        archive: archiveResults
+                    });
+                }, 500);
+            }
+        } catch (error) {
+            console.log('Error checking page status:', error);
+        }
+    }
 }
 
-browser.webRequest.onCompleted.addListener(handleWebRequest, {urls: ["<all_urls>"], types: ["main_frame"]}, []);
+browserAPI.tabs.onUpdated.addListener(handleTabUpdate);

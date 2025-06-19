@@ -1,5 +1,8 @@
+// Cross-browser compatibility
+const browserAPI = (typeof browser !== 'undefined') ? browser : chrome;
+
 async function getPageUrl() {
-    const tab = await browser.tabs.query({active: true, currentWindow: true})
+    const tab = await browserAPI.tabs.query({active: true, currentWindow: true})
     return tab[0].url
 }
 
@@ -24,7 +27,7 @@ async function setupArchiveLink() {
     button.className = 'archive-button'
     button.target = '_blank'
     button.rel = 'noopener noreferrer'
-    button.style.backgroundImage = `url('${browser.runtime.getURL(`images/${buttonBase}`)}')`
+    button.style.backgroundImage = `url('${browserAPI.runtime.getURL(`images/${buttonBase}`)}')`
     button.style.backgroundSize = '100% 100%'
     button.style.backgroundRepeat = 'no-repeat'
     button.style.backgroundPosition = 'center'
